@@ -3,12 +3,12 @@
 
   type BlockData = { id: number; nonce: number; data: string; hash: string; };
 
-  let blocks: BlockData[] = [{ id: 1, nonce: 302634, data: "Genesis Block", hash: "000000fae2d148330086582a55b5f36dcda0ff84330143953a7833aa1e44dc9d" }];
+  let blocks: BlockData[] = [{ id: 1, nonce: 119843944, data: "Genesis Block", hash: "0000000b18fde8ab045d70f44779f04e10e08bb3a154ad769c001bac3d63e15e" }];
   let blockHashes: Record<number, string> = {};
-  let difficulty = 5; 
+  let difficulty = 20; 
   const MAX_TARGET = 2n ** 256n - 1n;
 
-  $: target = MAX_TARGET >> BigInt(difficulty * 4); 
+  $: target = MAX_TARGET >> BigInt(difficulty); 
   $: targetHex = target.toString(16).padStart(64, '0');
   
   let genesisPrevHash = "0000000000000000000000000000000000000000000000000000000000000000";
@@ -49,9 +49,9 @@
       <div class="flex flex-col md:flex-row gap-8 items-center mt-2">
         <div class="form-control w-full max-w-xs">
           <label class="label" for="diff">
-            <span class="label-text font-bold">Difficulty: {difficulty}</span>
+            <span class="label-text font-bold">Difficulty: {difficulty} leading 0 Bits</span>
           </label>
-          <input id="diff" type="range" min="1" max="10" bind:value={difficulty} class="range range-primary range-sm" step="1" />
+          <input id="diff" type="range" min="1" max="32" bind:value={difficulty} class="range range-primary range-sm" step="1" />
           <div class="w-full flex justify-between text-xs px-2 mt-1 opacity-50">
             <span>Easy</span>
             <span>Hard</span>

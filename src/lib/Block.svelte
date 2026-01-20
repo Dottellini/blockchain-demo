@@ -13,14 +13,26 @@
   $: isValid = hashInt <= target;
   $: onHashChange({ id, hash });
 
-  function mine() {
+  async function mine() {
+    // Time to yield to the event loop to keep the UI responsive
+    await new Promise(resolve => setTimeout(resolve, 10));
+
     let currentHash = sha256(id + nonce + data + prevHash);
     let currentInt = BigInt('0x' + currentHash);
+    const BATCH_SIZE = 5000; 
+
     while (currentInt > target) {
-      nonce++;
-      currentHash = sha256(id + nonce + data + prevHash);
-      currentInt = BigInt('0x' + currentHash);
+      for (let i = 0; i < BATCH_SIZE; i++) {
+        nonce++;
+        currentHash = sha256(id + nonce + data + prevHash);
+        currentInt = BigInt('0x' + currentHash);
+        
+        if (currentInt <= target) break;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 0));
     }
+
   }
 </script>
 
